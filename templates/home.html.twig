@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MondoLingo - Explorez et apprenez des langues du monde entier !">
+    <title>MondoLingo - Accueil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+
+    <style>
+        body {
+            position: relative;
+            overflow: auto;
+        }
+
+        .trail {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 9999;
+            animation: fade 1s ease-out forwards;
+        }
+
+        @keyframes fade {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-primary text-white py-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="h2 mb-0">MondoLingo</h1>
+            <nav>
+                <ul class="nav">
+                    <li class="nav-item"><a href="#" class="nav-link text-white">Accueil</a></li>
+                    <li class="nav-item"><a href="#features" class="nav-link text-white">Fonctionnalités</a></li>
+                    <li class="nav-item"><a href="#about" class="nav-link text-white">À propos</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link text-white">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero bg-light py-5 text-center">
+        <div class="container">
+            <h2 class="display-4">Explorez le monde grâce aux langues</h2>
+            <p class="lead">Rejoignez une communauté d'apprenants passionnés et découvrez des outils innovants pour apprendre rapidement.</p>
+            <a href="/register" class="btn btn-primary btn-lg mt-3">Commencez Maintenant</a>
+        </div>
+    </section>
+
+    <section id="features" class="py-5">
+        <div class="container">
+            <h3 class="text-center mb-4">Pourquoi choisir MondoLingo ?</h3>
+            <div class="row text-center">
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Cours Interactifs</h5>
+                            <p class="card-text">Des leçons captivantes et interactives pour apprendre à votre rythme.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Communauté Active</h5>
+                            <p class="card-text">Pratiquez avec des locuteurs natifs et connectez-vous à une communauté mondiale.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow border-0">
+                        <div class="card-body">
+                            <h5 class="card-title">Suivi Personnalisé</h5>
+                            <p class="card-text">Un suivi détaillé de vos progrès pour atteindre vos objectifs linguistiques.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="bg-secondary text-white py-5">
+        <div class="container text-center">
+            <h3>À propos de MondoLingo</h3>
+            <p class="lead">MondoLingo est né d'une passion pour les langues et la culture. Notre mission est de rendre l'apprentissage des langues accessible et amusant pour tous.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h3 class="text-center mb-4">Contactez-nous</h3>
+            <form action="/contact" method="post" class="w-50 mx-auto">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Nom</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </form>
+
+            <div id="chatbot" class="chatbot-container">
+                <div id="chatbot-header" class="chatbot-header">
+                    MondoLingo Chatbot
+                    <button id="toggle-chatbot" style="float: right; background: none; border: none; color: white; font-size: 16px; cursor: pointer;">−</button>
+                </div>
+                <div id="chatbot-content">
+                    <div id="chatbot-messages" class="chatbot-messages"></div>
+                    <div class="chatbot-input">
+                        <input type="text" id="chatbot-input" placeholder="Posez une question..." />
+                        <button id="chatbot-send">Envoyer</button>
+                    </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-3 text-center">
+        <p class="mb-0">&copy; 2025 MondoLingo. Tous droits réservés.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('mousemove', function(e) {
+            const trail = document.createElement('div');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            trail.className = 'trail';
+            trail.style.left = `${e.pageX}px`;
+            trail.style.top = `${e.pageY}px`;
+            trail.style.background = randomColor;
+
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                trail.remove();
+            }, 1000);
+        });
+
+        document.getElementById('toggle-chatbot').addEventListener('click', function () {
+            const chatbot = document.getElementById('chatbot');
+            const chatbotContent = document.getElementById('chatbot-content');
+            const toggleButton = this;
+        
+            if (chatbot.classList.contains('collapsed')) {
+                chatbot.classList.remove('collapsed');
+                toggleButton.textContent = '−'; 
+                chatbotContent.style.display = 'block'; 
+            } else {
+                chatbot.classList.add('collapsed');
+                toggleButton.textContent = '+'; 
+                chatbotContent.style.display = 'none'; 
+            }
+        });
+        
+    </script>
+</body>
+</html>

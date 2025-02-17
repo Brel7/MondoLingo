@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Styles généraux */
+        body {
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Conteneur du formulaire */
+        .registration-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Titre */
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+            100% { text-shadow: 0 0 20px #0099ff, 0 0 30px #0099ff, 0 0 40px #0099ff; }
+        }
+
+        /* Styles des champs du formulaire */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #00ffcc;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #00ffcc;
+            border-radius: 5px;
+            background: transparent;
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0099ff;
+            outline: none;
+        }
+
+        /* Bouton d'inscription */
+        .btn-primary {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0099ff;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #00ffcc;
+            transform: scale(1.05);
+        }
+
+        /* Messages d'erreur */
+        .form-error {
+            color: #ff4d4d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="registration-container">
+        <h1>Inscription</h1>
+
+        {{ form_start(registrationForm, { 'attr': { 'class': 'registration-form' } }) }}
+            <div class="form-group">
+                {{ form_label(registrationForm.name) }}
+                {{ form_widget(registrationForm.name, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(registrationForm.name) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.password) }}
+                {{ form_widget(registrationForm.password, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(registrationForm.password) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.role) }}
+                {{ form_widget(registrationForm.role, { 'attr': { 'class': 'form-control' } }) }}
+                {{ form_errors(registrationForm.role) }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">S'inscrire</button>
+        {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}

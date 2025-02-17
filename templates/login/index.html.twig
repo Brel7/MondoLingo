@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion - La Matrice{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a1a, #000);
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+        }
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1;
+        }
+        h1 {
+            font-size: 4rem;
+            margin: 0;
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite alternate;
+        }
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc; }
+            100% { text-shadow: 0 0 20px #0099ff, 0 0 30px #0099ff, 0 0 40px #0099ff; }
+        }
+        form {
+            margin-top: 20px;
+        }
+        input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 200px;
+            border: 2px solid #00ffcc;
+            border-radius: 5px;
+            background: transparent;
+            color: #fff;
+            font-size: 1rem;
+        }
+        input::placeholder {
+            color: #aaa;
+        }
+        button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: #0099ff;
+            border: none;
+            color: #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+            position: absolute;
+        }
+        button:hover {
+            background: #00ffcc;
+        }
+        .balloon {
+            display: none;
+            width: 60px;
+            height: 80px;
+            background-color: #ff0099;
+            border-radius: 50%;
+            position: absolute;
+            clip-path: ellipse(50% 50% at 50% 50%);
+            animation: float 3s infinite ease-in-out;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <h1>Connexion</h1>
+        <form id="loginForm">
+            <input type="text" id="username" name="username" placeholder="Nom d'utilisateur" required>
+            <input type="password" id="password" name="password" placeholder="Mot de passe" required>
+            <button type="submit" id="loginButton">Se connecter</button>
+            <div id="balloon" class="balloon"></div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+    <script>
+        const loginButton = document.getElementById('loginButton');
+        const balloon = document.getElementById('balloon');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const form = document.getElementById('loginForm');
+
+        let isRunningAway = false;
+
+        // Fonction pour faire fuir le bouton
+        function runAway(event) {
+            if (isRunningAway) return;
+
+            const buttonRect = loginButton.getBoundingClientRect();
+            const mouseX = event.clientX;
+            const mouseY = event.clientY;
+
+            const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+            const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+            const distanceX = mouseX - buttonCenterX;
+            const distanceY = mouseY - buttonCenterY;
+
+            const angle = Math.atan2(distanceY, distanceX);
+            const speed = 300; // Vitesse de fuite augmentée
+
+            const newX = buttonCenterX - Math.cos(angle) * speed;
+            const newY = buttonCenterY - Math.sin(angle) * speed;
+
+            // Limites de l'écran
+            const maxX = window.innerWidth - buttonRect.width;
+            const maxY = window.innerHeight - buttonRect.height;
+
+            const finalX = Math.min(Math.max(newX, 0), maxX);
+            const finalY = Math.min(Math.max(newY, 0), maxY);
+
+            // Animation GSAP pour déplacer le bouton
+            gsap.to(loginButton, {
+                x: finalX - buttonRect.left,
+                y: finalY - buttonRect.top,
+                duration: 0.3, // Durée réduite pour plus de rapidité
+                ease: "power2.out",
+                onStart: () => {
+                    isRunningAway = true;
+                    // Transformation en ballon
+                    gsap.to(loginButton, {
+                        scale: 0,
+                        opacity: 0,
+                        duration: 0.2,
+                        onComplete: () => {
+                            balloon.style.display = 'block';
+                            balloon.style.left = `${finalX}px`;
+                            balloon.style.top = `${finalY}px`;
+                            gsap.fromTo(balloon, { scale: 0 }, { scale: 1, duration: 0.3 });
+                        }
+                    });
+                },
+                onComplete: () => {
+                    isRunningAway = false;
+                    // Retransformation en bouton
+                    gsap.to(balloon, {
+                        scale: 0,
+                        opacity: 0,
+                        duration: 0.2,
+                        onComplete: () => {
+                            balloon.style.display = 'none';
+                            gsap.to(loginButton, { scale: 1, opacity: 1, duration: 0.2 });
+                        }
+                    });
+                }
+            });
+        }
+
+        // Vérifie si les champs sont remplis
+        function checkInputs() {
+            if (usernameInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+                loginButton.removeEventListener('mouseover', runAway);
+                balloon.style.display = 'none';
+                gsap.to(loginButton, { x: 0, y: 0, duration: 0.5 });
+            }
+        }
+
+        // Événements
+        usernameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+        loginButton.addEventListener('mouseover', runAway);
+
+        // Soumission du formulaire
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (usernameInput.value.trim() !== '' && passwordInput.value.trim() !== '') {
+                alert('Connexion réussie ! Redirection...');
+                window.location.href = "{{ path('app_home') }}"; // Redirection vers la page d'accueil
+            } else {
+                alert('Veuillez remplir tous les champs !');
+            }
+        });
+    </script>
+{% endblock %}
